@@ -1,0 +1,109 @@
+*{
+    box-sizing: border-box;
+}
+body,html{
+    min-height: 100%;
+    position: relative;
+}
+img{
+    border-radius: 45px;
+    margin: 15px;
+    border: solid #8D4AF6;
+    border-style: double;
+}
+
+body{
+    /* background-color: #3F7DD4; */
+    background-image: url('../Images/MallBG.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+header{
+    padding: 50px;
+    /* margin-top: 5px; */
+    background-color: #525252c9;
+    /* border-radius: 50px; */
+    width: 100%;
+    border-bottom: solid #8D4AF6;
+}
+header h1, #resultSection h1{
+    background-color: #525252fb;
+    border: solid #8D4AF6;
+    border-radius: 20px;
+    display: inline;
+    padding: 25px;
+    font-family: 'Architects Daughter', cursive;
+    font-size: large;
+    font-weight: bolder;
+    color: #8D4AF6;
+}
+
+main{
+    clear: both;
+    min-height: 100vh;
+    margin: 15px;
+    text-align: center;
+}
+#voteImages{
+    position: relative;
+    margin-top: 100px;
+    margin-bottom: 50x;
+    min-height: 250px;
+}
+#voteImages button{
+    border: solid #8D4AF6;
+    border-radius: 25px;
+    padding: 50px 100px;
+    /* padding: 256px; */
+    font-size: 16px;
+    background-color: #525252c9;
+    margin-right: 25px;
+    margin-top: 10px;
+    font-family: 'Architects Daughter', cursive;
+    font-size: 40px;
+    color: #8D4AF6;
+}
+
+#resultSection{
+    position: relative;
+    background-color: #525252c9;
+    border: solid #8D4AF6;
+    margin: auto;
+    width: 70%;
+    padding: 100px;
+    min-height: 500px;
+    border-radius: 50px;
+}
+#resultSection button{
+    border: solid #8D4AF6;
+    border-radius: 25px;
+    padding: 35px 70px;
+    font-size: 16px;
+    background-color: #525252c9;
+    margin-right: 25px;
+    margin-top: 10px;
+    font-family: 'Architects Daughter', cursive;
+    font-size: 34px;
+    color: #8D4AF6;
+}
+
+#resultSection ul li{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    color: #1a002b;
+    margin: 10px;
+    margin-top: 15px;
+    font-weight: bolder;
+    text-align: justify;
+    list-style: circle;
+}
+
+footer{
+    padding: 50px;
+    /* margin-top: 5px; */
+    background-color: #525252c9;
+    /* border-radius: 50px; */
+    width: 100%;
+    border-top: solid #8D4AF6;
+}
