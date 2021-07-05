@@ -25,18 +25,24 @@
     <main>
         <audio src="SFX/Select Sound Effect.mp3" id="clickSFX"></audio>
         <audio src="SFX/clickSFX2.wav" id="clickSFX2"></audio>
+        <h2 class='instructions'>
+            Please click on the product you like.
+        </h2>
         <section id="voteImages">
-            <!-- <img src="" alt="" id="leftImage">
-            <img src="" alt="" id="midImage">
-            <img src="" alt="" id="rightImage"> -->
         </section>
         <section id="resultSection">
-            
+            <h2 class='instructions'>
+                Your results are going to be viewed here..
+            </h2>
+            <div id="chartHolder">
+                <canvas id="myChart"></canvas>
+            </div>
         </section>
     </main>
     <footer>
 
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="JS/app.js"></script>
 </body>
 </html>
