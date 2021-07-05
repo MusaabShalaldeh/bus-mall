@@ -97,11 +97,9 @@ function renderImages(){
         img.src = productsHolder[votesArr[i]].imgPath;
         img.width = fixedWidth;
         img.height = fixedHeight;
-
-
-        img.addEventListener('click', voteThis,);
     }
-
+    //add click event
+    voteSection.addEventListener('click', voteThis);
 }
 
 function voteThis(event)
@@ -129,6 +127,8 @@ function voteThis(event)
 
 function triggerVoteEnd()
 {
+    //remove click event
+    voteSection.removeEventListener('click', voteThis);
     //add buttons to show result and redo the vote
 
     // resultSection
