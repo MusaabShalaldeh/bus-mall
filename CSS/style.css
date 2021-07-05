@@ -47,7 +47,7 @@ main{
 }
 #voteImages{
     position: relative;
-    margin-top: 100px;
+    margin-top: 50px;
     margin-bottom: 50x;
     min-height: 250px;
 }
@@ -75,7 +75,7 @@ main{
     min-height: 500px;
     border-radius: 50px;
 }
-#resultSection button{
+#resultSection button, .instructions{
     border: solid #8D4AF6;
     border-radius: 25px;
     padding: 35px 70px;
@@ -87,7 +87,10 @@ main{
     font-size: 34px;
     color: #8D4AF6;
 }
-
+.instructions{
+    width: 40%;
+    margin: auto;
+}
 #resultSection ul li{
     font-family: 'Montserrat', sans-serif;
     font-size: 20px;
@@ -98,6 +101,17 @@ main{
     text-align: justify;
     list-style: circle;
 }
+/* 
+.instructions{
+    border: solid #8D4AF6;
+    border-radius: 25px;
+    font-size: 16px;
+    background-color: #525252c9;
+    color: #8D4AF6;
+    font-family: 'Architects Daughter', cursive;
+    margin-right: 25px;
+    margin-top: 10px;
+} */
 
 footer{
     padding: 50px;

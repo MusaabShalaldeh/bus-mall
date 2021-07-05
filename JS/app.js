@@ -9,6 +9,12 @@ let maxRounds = 25;
 
 let round = 0;
 
+let productNames = [];
+
+let overallTimesVoted = [];
+
+let overallTimesShown = [];
+
 const voteSection = document.getElementById('voteImages');
 
 
@@ -30,6 +36,7 @@ function Product(productName, imgPath){
     this.timesShown = 0;
 
     productsHolder.push(this);
+    productNames.push(this.productName);
 }
 
 
@@ -75,12 +82,15 @@ function renderImages(){
     let vote2 = randomNum(0,productsHolder.length - 1);
     let vote3 = randomNum(0,productsHolder.length - 1);
 
-    while(checkIfValuesMatch(vote1,vote2,vote3))
+    console.log('before', vote1, vote2, vote3);
+    console.log(checkIfValuesMatch(vote1,vote2,vote3) || checkIfValuesAreInArray(lastSetOfImages,vote1,vote2,vote3));
+    while(checkIfValuesMatch(vote1,vote2,vote3) || checkIfValuesAreInArray(lastSetOfImages,vote1,vote2,vote3))
     {
         vote1 = randomNum(0,productsHolder.length - 1);
         vote2 = randomNum(0,productsHolder.length - 1);
         vote3 = randomNum(0,productsHolder.length - 1);
     }
+    console.log('after', vote1, vote2, vote3);
 
     // loop through this array
     const votesArr = [vote1,vote2,vote3];
@@ -93,7 +103,7 @@ function renderImages(){
         voteSection.appendChild(img);
 
         productsHolder[votesArr[i]].timesShown += 1;
-
+        
         img.src = productsHolder[votesArr[i]].imgPath;
         img.width = fixedWidth;
         img.height = fixedHeight;
@@ -146,6 +156,13 @@ function triggerVoteEnd()
     restartButton.id = 'restartButton';
     voteSection.appendChild(restartButton);
     restartButton.onclick = restartVote;
+
+    //hide instruciton text
+    const instructionTexts = document.getElementsByClassName('instructions');
+    for (let i = 0; i < instructionTexts.length; i++) {
+
+        instructionTexts[i].style.display = 'none';
+    }
 }
 
 function showResults()
@@ -167,7 +184,16 @@ function showResults()
         const _li = document.createElement('li');
         _ul.appendChild(_li);
         _li.textContent = sentence;
+
+        //push to times shown and times voted arrays
+        overallTimesVoted.push(productsHolder[i].timesVoted);
+        overallTimesShown.push(productsHolder[i].timesShown);
     }
+    const newChart = document.createElement('canvas');
+    newChart.id = 'myChart';
+    document.getElementById('chartHolder').appendChild(newChart);
+
+    viewCharts();
 }
 
 function restartVote()
@@ -179,14 +205,29 @@ function restartVote()
     voteSection.removeChild(document.getElementById('restartButton'));
     resultSection.removeChild(document.getElementById('resultsButton'));
 
+    //remove chart
+
     //reset times shown and voted
     for (let i = 0; i < productsHolder.length; i++) {
         productsHolder[i].timesShown = 0;
         productsHolder[i].timesVoted = 0;
     }
 
-    //reset last images set
+    //reset last images set aswell overall times voted and overall times shown
     lastSetOfImages = [];
+    overallTimesVoted = [];
+    overallTimesShown = [];
+
+    //clear chart elements
+    if(document.getElementById('myChart') != null)
+        document.getElementById('chartHolder').removeChild(document.getElementById('myChart'));
+
+    // show instructions text back
+    const instructionTexts = document.getElementsByClassName('instructions');
+    for (let i = 0; i < instructionTexts.length; i++) {
+
+        instructionTexts[i].style.display = 'block';
+    }
 
     //remove existing results list.
     //double checking if the element exists or not to not cause errors.
@@ -201,8 +242,46 @@ function restartVote()
 renderImages();
 
 
-
-
+function viewCharts()
+{
+    // Chart.defaults.global.defaultFontColor = "#fff";
+    Chart.defaults.borderColor = '#8D4AF6';
+    Chart.defaults.color = '#1a002b';
+    Chart.defaults.font.size = 17;
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: productNames,
+            datasets: [{
+                label: 'Percentage of Votes',
+                data: overallTimesVoted,//times voted array
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 1,
+                scaleFontColor: "#FFFFFF",
+                lineWidth: 25
+            },{
+                label: 'Percentage of Times Shown',
+                data: overallTimesShown,//times shown array
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 206, 86, 1)'
+                ],
+                borderWidth: 1,
+                scaleFontColor: "#FFFFFF",
+                lineWidth: 25
+            }
+        ]
+        },
+    });
+}
 
 
 
@@ -216,6 +295,13 @@ function randomNum(min, max) {
 function checkIfValuesMatch(val1, val2, val3){
     //will check all values
     if(val1 == val2 || val1 == val3 || val2 == val3)
+        return true;
+    else
+        return false;
+}
+
+function checkIfValuesAreInArray(arr,val1,val2,val3){
+    if(arr.includes(val1) || arr.includes(val2) || arr.includes(val3))
         return true;
     else
         return false;
