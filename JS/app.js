@@ -3,6 +3,8 @@
 
 let productsHolder = [];
 
+const productsKey = "products";
+
 let lastSetOfImages = [];
 
 let maxRounds = 25;
@@ -14,6 +16,7 @@ let productNames = [];
 let overallTimesVoted = [];
 
 let overallTimesShown = [];
+
 
 const voteSection = document.getElementById('voteImages');
 
@@ -27,7 +30,7 @@ const fixedHeight = 256;
 const fixedWidth = 300;
 
 
-function Product(productName, imgPath){
+function Product(productName, imgPath) {
 
     this.productName = productName;
     this.imgPath = imgPath;
@@ -36,40 +39,50 @@ function Product(productName, imgPath){
     this.timesShown = 0;
 
     productsHolder.push(this);
-    productNames.push(this.productName);
+    // productNames.push(this.productName);
 }
 
+// make products only 1 time and retrive them from storage on all other vote
+function makeProducts() {
 
-new Product('bag','Images/bag.jpg');
-new Product('banana','Images/banana.jpg');
-new Product('bathroom','Images/bathroom.jpg');
-new Product('boots','Images/boots.jpg');
-new Product('breakfast','Images/breakfast.jpg');
-
-new Product('bubblegum','Images/bubblegum.jpg');
-new Product('chair','Images/chair.jpg');
-new Product('cthulhu','Images/cthulhu.jpg');
-new Product('dog-duck','Images/dog-duck.jpg');
-new Product('dragon','Images/dragon.jpg');
-
-new Product('pen','Images/pen.jpg');
-new Product('pet-sweep','Images/pet-sweep.jpg');
-new Product('scissors','Images/scissors.jpg');
-new Product('shark','Images/shark.jpg');
-new Product('sweep','Images/sweep.png');
-
-new Product('tauntaun','Images/tauntaun.jpg');
-new Product('unicorn','Images/unicorn.jpg');
-new Product('water-Can','Images/water-can.jpg');
-new Product('wine-glass','Images/wine-glass.jpg');
-
-
-
-
-
-function renderImages(){
-    if(round >= maxRounds)
+    if(localStorage.getItem(productsKey) == null)
     {
+        new Product('bag', 'Images/bag.jpg');
+        new Product('banana', 'Images/banana.jpg');
+        new Product('bathroom', 'Images/bathroom.jpg');
+        new Product('boots', 'Images/boots.jpg');
+        new Product('breakfast', 'Images/breakfast.jpg');
+    
+        new Product('bubblegum', 'Images/bubblegum.jpg');
+        new Product('chair', 'Images/chair.jpg');
+        new Product('cthulhu', 'Images/cthulhu.jpg');
+        new Product('dog-duck', 'Images/dog-duck.jpg');
+        new Product('dragon', 'Images/dragon.jpg');
+    
+        new Product('pen', 'Images/pen.jpg');
+        new Product('pet-sweep', 'Images/pet-sweep.jpg');
+        new Product('scissors', 'Images/scissors.jpg');
+        new Product('shark', 'Images/shark.jpg');
+        new Product('sweep', 'Images/sweep.png');
+    
+        new Product('tauntaun', 'Images/tauntaun.jpg');
+        new Product('unicorn', 'Images/unicorn.jpg');
+        new Product('water-Can', 'Images/water-can.jpg');
+        new Product('wine-glass', 'Images/wine-glass.jpg');
+    }
+    else{
+        const parsedProductsArry = JSON.parse(localStorage.getItem(productsKey));
+        
+        productsHolder = parsedProductsArry;
+        console.log(productsHolder);
+    }
+}
+
+makeProducts();
+
+
+function renderImages() {
+    if (round >= maxRounds) {
         triggerVoteEnd();
         return;
     }
@@ -78,22 +91,21 @@ function renderImages(){
     // render images
 
 
-    let vote1 = randomNum(0,productsHolder.length - 1);
-    let vote2 = randomNum(0,productsHolder.length - 1);
-    let vote3 = randomNum(0,productsHolder.length - 1);
+    let vote1 = randomNum(0, productsHolder.length - 1);
+    let vote2 = randomNum(0, productsHolder.length - 1);
+    let vote3 = randomNum(0, productsHolder.length - 1);
 
-    console.log('before', vote1, vote2, vote3);
-    console.log(checkIfValuesMatch(vote1,vote2,vote3) || checkIfValuesAreInArray(lastSetOfImages,vote1,vote2,vote3));
-    while(checkIfValuesMatch(vote1,vote2,vote3) || checkIfValuesAreInArray(lastSetOfImages,vote1,vote2,vote3))
-    {
-        vote1 = randomNum(0,productsHolder.length - 1);
-        vote2 = randomNum(0,productsHolder.length - 1);
-        vote3 = randomNum(0,productsHolder.length - 1);
+    // console.log('before', vote1, vote2, vote3);
+    // console.log(checkIfValuesMatch(vote1, vote2, vote3) || checkIfValuesAreInArray(lastSetOfImages, vote1, vote2, vote3));
+    while (checkIfValuesMatch(vote1, vote2, vote3) || checkIfValuesAreInArray(lastSetOfImages, vote1, vote2, vote3)) {
+        vote1 = randomNum(0, productsHolder.length - 1);
+        vote2 = randomNum(0, productsHolder.length - 1);
+        vote3 = randomNum(0, productsHolder.length - 1);
     }
-    console.log('after', vote1, vote2, vote3);
+    // console.log('after', vote1, vote2, vote3);
 
     // loop through this array
-    const votesArr = [vote1,vote2,vote3];
+    const votesArr = [vote1, vote2, vote3];
 
     lastSetOfImages = votesArr;
 
@@ -103,7 +115,7 @@ function renderImages(){
         voteSection.appendChild(img);
 
         productsHolder[votesArr[i]].timesShown += 1;
-        
+
         img.src = productsHolder[votesArr[i]].imgPath;
         img.width = fixedWidth;
         img.height = fixedHeight;
@@ -112,8 +124,8 @@ function renderImages(){
     voteSection.addEventListener('click', voteThis);
 }
 
-function voteThis(event)
-{
+function voteThis(event) {
+
     //order of execution matters.
 
     //stopping sound incase the user spams clicking so that it can be replayed.
@@ -135,8 +147,7 @@ function voteThis(event)
 }
 
 
-function triggerVoteEnd()
-{
+function triggerVoteEnd() {
     //remove click event
     voteSection.removeEventListener('click', voteThis);
     //add buttons to show result and redo the vote
@@ -145,17 +156,20 @@ function triggerVoteEnd()
     round = 0;
     //results button
     const viewResultsButton = document.createElement('button');
-    viewResultsButton.textContent= 'View Results';
+    viewResultsButton.textContent = 'Submit & View Results';
     viewResultsButton.id = 'resultsButton';
     resultSection.appendChild(viewResultsButton);
     viewResultsButton.onclick = showResults;
 
 
     const restartButton = document.createElement('button');
-    restartButton.textContent= 'Restart Vote';
+    restartButton.textContent = 'Restart Vote';
     restartButton.id = 'restartButton';
     voteSection.appendChild(restartButton);
     restartButton.onclick = restartVote;
+
+    const productsString = JSON.stringify(productsHolder);
+    localStorage.setItem(productsKey, productsString);
 
     //hide instruciton text
     const instructionTexts = document.getElementsByClassName('instructions');
@@ -165,8 +179,7 @@ function triggerVoteEnd()
     }
 }
 
-function showResults()
-{
+function showResults() {
     clickSFX2.play();
     document.getElementById('resultsButton').style.display = 'none';
 
@@ -179,7 +192,7 @@ function showResults()
 
         // banana had 3 votes, and was seen 5 times.
         const p = productsHolder[i];
-        const sentence = p.productName+' had '+p.timesVoted+' votes, and was seem '+p.timesShown+' times.';
+        const sentence = p.productName + ' had ' + p.timesVoted + ' votes, and was seem ' + p.timesShown + ' times.';
 
         const _li = document.createElement('li');
         _ul.appendChild(_li);
@@ -188,6 +201,8 @@ function showResults()
         //push to times shown and times voted arrays
         overallTimesVoted.push(productsHolder[i].timesVoted);
         overallTimesShown.push(productsHolder[i].timesShown);
+        productNames.push(productsHolder[i].productName);
+        // console.log(overallTimesShown,overallTimesVoted);
     }
     const newChart = document.createElement('canvas');
     newChart.id = 'myChart';
@@ -196,8 +211,7 @@ function showResults()
     viewCharts();
 }
 
-function restartVote()
-{
+function restartVote() {
     //restart the vote process
     clickSFX2.play();
 
@@ -205,21 +219,14 @@ function restartVote()
     voteSection.removeChild(document.getElementById('restartButton'));
     resultSection.removeChild(document.getElementById('resultsButton'));
 
-    //remove chart
-
-    //reset times shown and voted
-    for (let i = 0; i < productsHolder.length; i++) {
-        productsHolder[i].timesShown = 0;
-        productsHolder[i].timesVoted = 0;
-    }
-
     //reset last images set aswell overall times voted and overall times shown
     lastSetOfImages = [];
+    productNames = [];
     overallTimesVoted = [];
     overallTimesShown = [];
 
     //clear chart elements
-    if(document.getElementById('myChart') != null)
+    if (document.getElementById('myChart') != null)
         document.getElementById('chartHolder').removeChild(document.getElementById('myChart'));
 
     // show instructions text back
@@ -231,7 +238,7 @@ function restartVote()
 
     //remove existing results list.
     //double checking if the element exists or not to not cause errors.
-    if(document.getElementById('resultsList') != null)
+    if (document.getElementById('resultsList') != null)
         resultSection.removeChild(document.getElementById('resultsList'));
 
 
@@ -242,11 +249,10 @@ function restartVote()
 renderImages();
 
 
-function viewCharts()
-{
+function viewCharts() {
     // Chart.defaults.global.defaultFontColor = "#fff";
     Chart.defaults.borderColor = '#8D4AF6';
-    Chart.defaults.color = '#1a002b';
+    Chart.defaults.color = '#0054c2';
     Chart.defaults.font.size = 17;
     var ctx = document.getElementById('myChart').getContext('2d');
     var myChart = new Chart(ctx, {
@@ -265,7 +271,7 @@ function viewCharts()
                 borderWidth: 1,
                 scaleFontColor: "#FFFFFF",
                 lineWidth: 25
-            },{
+            }, {
                 label: 'Percentage of Times Shown',
                 data: overallTimesShown,//times shown array
                 backgroundColor: [
@@ -278,7 +284,7 @@ function viewCharts()
                 scaleFontColor: "#FFFFFF",
                 lineWidth: 25
             }
-        ]
+            ]
         },
     });
 }
@@ -292,28 +298,28 @@ function randomNum(min, max) {
 }
 
 
-function checkIfValuesMatch(val1, val2, val3){
+function checkIfValuesMatch(val1, val2, val3) {
     //will check all values
-    if(val1 == val2 || val1 == val3 || val2 == val3)
+    if (val1 == val2 || val1 == val3 || val2 == val3)
         return true;
     else
         return false;
 }
 
-function checkIfValuesAreInArray(arr,val1,val2,val3){
-    if(arr.includes(val1) || arr.includes(val2) || arr.includes(val3))
+function checkIfValuesAreInArray(arr, val1, val2, val3) {
+    if (arr.includes(val1) || arr.includes(val2) || arr.includes(val3))
         return true;
     else
         return false;
 }
 
-function compareChildren(parentElement, element){
+function compareChildren(parentElement, element) {
 
     const children = parentElement.children;
 
     for (let i = 0; i < children.length; i++) {
 
-        if(children[i] == element){
+        if (children[i] == element) {
 
             return i;
         }
